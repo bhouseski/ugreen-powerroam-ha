@@ -12,6 +12,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import BLE_SENSORS, DOMAIN, SENSORS, SUGGESTED_HOURS, TRANSPORT_BLE
 
 
+# Raw voltage readings arrive from the device in microvolts (µV).
+# Normalise to volts so the frontend shows "5 V" instead of "5,000,000".
+UV_KEYS = {
+    "ac_in_vol", "ac_vol", "dc_vol",
+    *(f"cell_voltage_{n}" for n in range(1, 8)),
+}
+UV_DIVISOR = 1_000_000
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
