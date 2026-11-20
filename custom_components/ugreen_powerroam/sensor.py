@@ -18,7 +18,7 @@ UV_KEYS = {
     "ac_in_vol", "ac_vol", "dc_vol",
     *(f"cell_voltage_{n}" for n in range(1, 8)),
 }
-UV_DIVISOR = 1_000_000
+UV_DIVISOR = 1_000
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
