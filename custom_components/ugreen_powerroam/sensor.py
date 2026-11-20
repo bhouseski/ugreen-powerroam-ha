@@ -51,6 +51,8 @@ class UgreenSensor(SensorEntity):
         unique_key = key
         if key.startswith("cell_voltage_"):
             self._attr_suggested_display_precision = 3
+        if key in ("ac_in_vol", "ac_vol", "dc_vol"):
+            self._attr_suggested_display_precision = 1
         if key in SUGGESTED_HOURS:
             self._attr_suggested_unit_of_measurement = "h"
             self._attr_suggested_display_precision = 1
@@ -74,7 +76,10 @@ class UgreenSensor(SensorEntity):
             return None
         if self._key == "charge_remain_time" and not data.get("charge_power_all"):
             return None
-        return data.get(self._key)
+        value = data.get(self._key)
+        if value is not None and self._key in UV_KEYS:
+            value = round(float(value) / UV_DIVISOR, 3)
+        return value
 
     @property
     def available(self) -> bool:
